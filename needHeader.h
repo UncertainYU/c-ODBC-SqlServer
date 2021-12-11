@@ -7,103 +7,103 @@
 #include<sqlext.h>
 #include<sqltypes.h>
 #include<odbcss.h>
-#define makered makecolor(4) //Êä³ö±äºìÉ«
-#define makewhite makecolor(7)//Êä³ö±ä°×É«
+#define makered makecolor(4) //è¾“å‡ºå˜çº¢è‰²
+#define makewhite makecolor(7)//è¾“å‡ºå˜ç™½è‰²
 
 typedef signed short            RETCODE;
 //retcode:success:0,success with info:1,invalid:-2,error:-1
-RETCODE connectDataSource();//ÉêÇë»·¾³¾ä±ú²¢ÅäÖÃ»·¾³ÊôÐÔ
-RETCODE allocConnectHandle();//ÉêÇëÁ¬½Ó¾ä±ú
-RETCODE connectSQL();//ÉêÇëÁ¬½ÓÊý¾Ý¿â
-RETCODE allocHstmtHandle();//ÉêÇëSQLÓï¾ä¾ä±ú
-RETCODE closeHstmtHandle();//¹Ø±ÕSQLÓï¾ä¾ä±ú
-RETCODE disconnet();//¶Ï¿ªÁ¬½Ó²¢ÊÍ·ÅÆäËû¾ä±ú
-void makecolor(short x);//¸ü¸Ä²¿·ÖÊä³öÑÕÉ«
-void connectYES();//Á¬½Ó³É¹¦ºóÖ´ÐÐµÄ´úÂë¶Î
-void connectNO();//Á¬½ÓÊ§°ÜºóÖ´ÐÐµÄ´úÂë¶Î
-void BeginningView();//¿ªÊ¼²Ëµ¥
+RETCODE connectDataSource();//ç”³è¯·çŽ¯å¢ƒå¥æŸ„å¹¶é…ç½®çŽ¯å¢ƒå±žæ€§
+RETCODE allocConnectHandle();//ç”³è¯·è¿žæŽ¥å¥æŸ„
+RETCODE connectSQL();//ç”³è¯·è¿žæŽ¥æ•°æ®åº“
+RETCODE allocHstmtHandle();//ç”³è¯·SQLè¯­å¥å¥æŸ„
+RETCODE closeHstmtHandle();//å…³é—­SQLè¯­å¥å¥æŸ„
+RETCODE disconnet();//æ–­å¼€è¿žæŽ¥å¹¶é‡Šæ”¾å…¶ä»–å¥æŸ„
+void makecolor(short x);//æ›´æ”¹éƒ¨åˆ†è¾“å‡ºé¢œè‰²
+void connectYES();//è¿žæŽ¥æˆåŠŸåŽæ‰§è¡Œçš„ä»£ç æ®µ
+void connectNO();//è¿žæŽ¥å¤±è´¥åŽæ‰§è¡Œçš„ä»£ç æ®µ
+void BeginningView();//å¼€å§‹èœå•
 SQLHENV henv = SQL_NULL_HENV;
 SQLHDBC hdbc1 = SQL_NULL_HDBC;
 SQLHSTMT hstmt1 = SQL_NULL_HSTMT;
 
 
-//ÉêÇë»·¾³¾ä±ú²¢ÅäÖÃ»·¾³ÊôÐÔ
+//ç”³è¯·çŽ¯å¢ƒå¥æŸ„å¹¶é…ç½®çŽ¯å¢ƒå±žæ€§
 RETCODE connectDataSource() {
 	RETCODE retcode;
-	//ÉêÇë»·¾³¾ä±ú
+	//ç”³è¯·çŽ¯å¢ƒå¥æŸ„
 	retcode = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &henv);
 	switch (retcode) {
 	case SQL_SUCCESS:
-	case SQL_SUCCESS_WITH_INFO:printf("»·¾³¾ä±úÉêÇë³É¹¦!\n"); break;
-	case SQL_INVALID_HANDLE:makered; printf("ÎÞÐ§µÄ»·¾³¾ä±ú\n"); makewhite; break;
-	case SQL_ERROR:makered; printf("»·¾³¾ä±úÉêÇëÊ§°Ü\n"); makewhite; break;
+	case SQL_SUCCESS_WITH_INFO:printf("çŽ¯å¢ƒå¥æŸ„ç”³è¯·æˆåŠŸ!\n"); break;
+	case SQL_INVALID_HANDLE:makered; printf("æ— æ•ˆçš„çŽ¯å¢ƒå¥æŸ„\n"); makewhite; break;
+	case SQL_ERROR:makered; printf("çŽ¯å¢ƒå¥æŸ„ç”³è¯·å¤±è´¥\n"); makewhite; break;
 	}
-	//ÉèÖÃ»·¾³ÊôÐÔ
+	//è®¾ç½®çŽ¯å¢ƒå±žæ€§
 	retcode = SQLSetEnvAttr(henv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3,
 		SQL_IS_INTEGER);
 	switch (retcode) {
 	case SQL_SUCCESS:
-	case SQL_SUCCESS_WITH_INFO:printf("»·¾³¾ä±úÊôÐÔÅäÖÃ³É¹¦!\n"); break;
-	case SQL_INVALID_HANDLE:printf("ÎÞÐ§µÄ»·¾³¾ä±úÊôÐÔÅäÖÃ\n"); break;
-	case SQL_ERROR:printf("»·¾³¾ä±úÊôÐÔÅäÖÃÊ§°Ü\n"); break;
+	case SQL_SUCCESS_WITH_INFO:printf("çŽ¯å¢ƒå¥æŸ„å±žæ€§é…ç½®æˆåŠŸ!\n"); break;
+	case SQL_INVALID_HANDLE:printf("æ— æ•ˆçš„çŽ¯å¢ƒå¥æŸ„å±žæ€§é…ç½®\n"); break;
+	case SQL_ERROR:printf("çŽ¯å¢ƒå¥æŸ„å±žæ€§é…ç½®å¤±è´¥\n"); break;
 	}
 	return retcode;
 }
-//ÉêÇëÁ¬½Ó¾ä±ú
+//ç”³è¯·è¿žæŽ¥å¥æŸ„
 RETCODE allocConnectHandle() {
 	RETCODE retcode;
-	retcode = SQLAllocHandle(SQL_HANDLE_DBC, henv, &hdbc1);//ÉêÇëÁ¬½Ó¾ä±ú
+	retcode = SQLAllocHandle(SQL_HANDLE_DBC, henv, &hdbc1);//ç”³è¯·è¿žæŽ¥å¥æŸ„
 	switch (retcode) {
 	case SQL_SUCCESS:
-	case SQL_SUCCESS_WITH_INFO:printf("Á¬½Ó¾ä±úÉêÇë³É¹¦!\n"); break;
-	case SQL_INVALID_HANDLE:makered; printf("ÎÞÐ§µÄÁ¬½Ó¾ä±ú\n"); makewhite; break;
-	case SQL_ERROR:makered; printf("Á¬½Ó¾ä±úÉêÇëÊ§°Ü\n"); makewhite; break;
+	case SQL_SUCCESS_WITH_INFO:printf("è¿žæŽ¥å¥æŸ„ç”³è¯·æˆåŠŸ!\n"); break;
+	case SQL_INVALID_HANDLE:makered; printf("æ— æ•ˆçš„è¿žæŽ¥å¥æŸ„\n"); makewhite; break;
+	case SQL_ERROR:makered; printf("è¿žæŽ¥å¥æŸ„ç”³è¯·å¤±è´¥\n"); makewhite; break;
 	}
 	return retcode;
 }
-//Á¬½ÓÊý¾Ý¿â
-//ÕâÀïÌá¹©ÁËÁ½ÖÖ·½Ê½
-//Ä¬ÈÏ·½Ê½ÊÇ´úÂë³õÊ¼»¯
-//ÁíÒ»ÖÖ·½Ê½ÊÇ¿ØÖÆÌ¨ÊäÈë³õÊ¼»¯
-//¿ÉÒÔ×ÔÐÐÑ¡Ôñ
+//è¿žæŽ¥æ•°æ®åº“
+//è¿™é‡Œæä¾›äº†ä¸¤ç§æ–¹å¼
+//é»˜è®¤æ–¹å¼æ˜¯ä»£ç åˆå§‹åŒ–
+//å¦ä¸€ç§æ–¹å¼æ˜¯æŽ§åˆ¶å°è¾“å…¥åˆå§‹åŒ–
+//å¯ä»¥è‡ªè¡Œé€‰æ‹©
 RETCODE connectSQL() {
-	UCHAR  szDSN[SQL_MAX_DSN_LENGTH + 1] = "csql", szUID[MAXNAME] = "test", szAuthStr[MAXNAME] = "test123456";
+	UCHAR  szDSN[SQL_MAX_DSN_LENGTH + 1] = "", szUID[MAXNAME] = "", szAuthStr[MAXNAME] = "";
 	RETCODE retcode;
-	//printf("ÇëÊäÈë²ÎÊý1(Êý¾ÝÔ´Ãû³Æ):");
+	//printf("è¯·è¾“å…¥å‚æ•°1(æ•°æ®æºåç§°):");
 	//gets(szDSN);
-	//printf("ÇëÊäÈë²ÎÊý2(ÓÃ»§Ãû):");
+	//printf("è¯·è¾“å…¥å‚æ•°2(ç”¨æˆ·å):");
 	//gets(szUID);
-	//printf("ÇëÊäÈë²ÎÊý3(ÃÜÂë):");
+	//printf("è¯·è¾“å…¥å‚æ•°3(å¯†ç ):");
 	//gets(szAuthStr);
 	retcode = SQLConnect(hdbc1, szDSN, strlen(szDSN), szUID, strlen(szUID), szAuthStr, strlen(szAuthStr));
 	return retcode;
 }
-//ÉêÇëSQLÓï¾ä¾ä±ú
+//ç”³è¯·SQLè¯­å¥å¥æŸ„
 RETCODE allocHstmtHandle() {
 	RETCODE retcode;
 	retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc1, &hstmt1);
 	switch (retcode) {
 	case SQL_SUCCESS:
-	case SQL_SUCCESS_WITH_INFO:printf("SQLÓï¾ä¾ä±úÉêÇë³É¹¦!\n"); break;
-	case SQL_INVALID_HANDLE:makered; printf("ÎÞÐ§µÄSQLÓï¾ä¾ä±ú\n"); makewhite; break;
-	case SQL_ERROR:makered; printf("SQLÓï¾ä¾ä±úÉêÇëÊ§°Ü\n"); makewhite; break;
+	case SQL_SUCCESS_WITH_INFO:printf("SQLè¯­å¥å¥æŸ„ç”³è¯·æˆåŠŸ!\n"); break;
+	case SQL_INVALID_HANDLE:makered; printf("æ— æ•ˆçš„SQLè¯­å¥å¥æŸ„\n"); makewhite; break;
+	case SQL_ERROR:makered; printf("SQLè¯­å¥å¥æŸ„ç”³è¯·å¤±è´¥\n"); makewhite; break;
 	}
 	return retcode;
 }
-//¹Ø±ÕSQLÓï¾ä¾ä±ú
+//å…³é—­SQLè¯­å¥å¥æŸ„
 RETCODE closeHstmtHandle() {
 	RETCODE retcode;
 	retcode = SQLCloseCursor(hstmt1);
 	retcode = SQLFreeHandle(SQL_HANDLE_STMT, hstmt1);
 	switch (retcode) {
 	case SQL_SUCCESS:
-	case SQL_SUCCESS_WITH_INFO:printf("SQLÓï¾ä¾ä±ú¹Ø±Õ³É¹¦!\n"); break;
-	case SQL_INVALID_HANDLE:makered; printf("ÎÞÐ§µÄSQLÓï¾ä¾ä±ú\n"); makewhite; break;
-	case SQL_ERROR:makered; printf("SQLÓï¾ä¾ä±ú¹Ø±ÕÊ§°Ü\n"); makewhite; break;
+	case SQL_SUCCESS_WITH_INFO:printf("SQLè¯­å¥å¥æŸ„å…³é—­æˆåŠŸ!\n"); break;
+	case SQL_INVALID_HANDLE:makered; printf("æ— æ•ˆçš„SQLè¯­å¥å¥æŸ„\n"); makewhite; break;
+	case SQL_ERROR:makered; printf("SQLè¯­å¥å¥æŸ„å…³é—­å¤±è´¥\n"); makewhite; break;
 	}
 	return retcode;
 }
-//¶Ï¿ªÁ¬½Ó²¢ÊÍ·ÅÆäËû¾ä±ú
+//æ–­å¼€è¿žæŽ¥å¹¶é‡Šæ”¾å…¶ä»–å¥æŸ„
 RETCODE disconnet() {
 	RETCODE retcode;
 	retcode = SQLDisconnect(hdbc1);
@@ -111,31 +111,31 @@ RETCODE disconnet() {
 	retcode = SQLFreeHandle(SQL_HANDLE_ENV, henv);
 	switch (retcode) {
 	case SQL_SUCCESS:
-	case SQL_SUCCESS_WITH_INFO:printf("¶Ï¿ªÁ¬½Ó³É¹¦!\n"); break;
-	case SQL_INVALID_HANDLE:makered; printf("ÎÞÐ§µÄ¶Ï¿ªÁ¬½Ó\n"); makewhite; break;
-	case SQL_ERROR:makered; printf("¶Ï¿ªÁ¬½ÓÊ§°Ü\n"); makewhite; break;
+	case SQL_SUCCESS_WITH_INFO:printf("æ–­å¼€è¿žæŽ¥æˆåŠŸ!\n"); break;
+	case SQL_INVALID_HANDLE:makered; printf("æ— æ•ˆçš„æ–­å¼€è¿žæŽ¥\n"); makewhite; break;
+	case SQL_ERROR:makered; printf("æ–­å¼€è¿žæŽ¥å¤±è´¥\n"); makewhite; break;
 	}
 	return retcode;
 }
-//¸ü¸Ä²¿·ÖÊä³öÓï¾äÑÕÉ«
-void makecolor(short x)	//×Ô¶¨Òåº¯¸ù¾Ý²ÎÊý¸Ä±äÑÕÉ« 
+//æ›´æ”¹éƒ¨åˆ†è¾“å‡ºè¯­å¥é¢œè‰²
+void makecolor(short x)	//è‡ªå®šä¹‰å‡½æ ¹æ®å‚æ•°æ”¹å˜é¢œè‰² 
 {
-	if (x >= 0 && x <= 15)//²ÎÊýÔÚ0-15µÄ·¶Î§ÑÕÉ«
+	if (x >= 0 && x <= 15)//å‚æ•°åœ¨0-15çš„èŒƒå›´é¢œè‰²
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x);
-	else//Ä¬ÈÏµÄÑÕÉ«°×É«
+	else//é»˜è®¤çš„é¢œè‰²ç™½è‰²
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 }
-//Á¬½Ó³É¹¦
+//è¿žæŽ¥æˆåŠŸ
 void connectYES() {
 	//system("cls");
-	printf("Á¬½Ó³É¹¦!\n");
+	printf("è¿žæŽ¥æˆåŠŸ!\n");
 }
-//Á¬½ÓÊ§°Ü
+//è¿žæŽ¥å¤±è´¥
 void connectNO() {
 	makered;
-	printf("Á¬½ÓÊ§°Ü!\n");
+	printf("è¿žæŽ¥å¤±è´¥!\n");
 	makewhite;
 }
-//¿ªÊ¼²Ëµ¥
+//å¼€å§‹èœå•
 void BeginningView() {
 }
